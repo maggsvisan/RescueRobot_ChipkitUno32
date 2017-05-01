@@ -1,3 +1,5 @@
+//sigue izq
+
 //1 de mayo
 #if defined(__PIC32MX__)
 #include <p32xxxx.h> /* this gives all the CPU/hardware definitions */
@@ -26,8 +28,8 @@ int fwd1,fwd2;
 int bck1,bck2;
 
 //echos y triggers ultrasonicos
-const int trigPin1=28;
-const int echoPin1=29;
+const int trigPin1=2;
+const int echoPin1=3;
 const int trigPin2=4;
 const int echoPin2=5;
 const int trigPin3=33;
@@ -148,7 +150,7 @@ void fullStop()
 
 }
 
-
+/*
 void medirDistanciaIzquierda(int sensor1,int sensor2,int distmin,int distmax){
   if (sensor1 > distmax && sensor2 > distmax )
   {
@@ -166,6 +168,33 @@ void medirDistanciaIzquierda(int sensor1,int sensor2,int distmin,int distmax){
      MotorDerecho=1000;  
    }
 }
+
+*/
+
+void medirDistanciaIzquierda(int sensor1,int sensor2,int distmin,int distmax){
+  
+  if (sensor1 > distmax && sensor2 > distmax )
+  {  Serial.println("lejos");
+     analogWrite(9, 150); //Jony lo había puesto en 500
+     analogWrite(10, 1000); 
+  }
+  else if (sensor1 < distmin && sensor2 < distmin )
+  {
+     Serial.println("cerca");
+     analogWrite(9, 1000); 
+     analogWrite(10, 150); 
+  }
+  else
+  {
+     Serial.println("dentro");
+     analogWrite(9, 1000); 
+     analogWrite(10, 1000);  
+   }
+}
+
+
+
+
 
 void medirDistanciaDerecha(int sensor1,int sensor2,int distmin,int distmax){
   
@@ -210,12 +239,16 @@ void loop()
           moveFwd();
           q=0;
         }
-          cuatro = getDistance(trigPin4,echoPin4);
-          cinco = getDistance(trigPin5,echoPin5);
-          medirDistanciaDerecha(cuatro,cinco,10,12);
+        //  cuatro = getDistance(trigPin4,echoPin4);
+        //  cinco = getDistance(trigPin5,echoPin5);
+        //  medirDistanciaDerecha(cuatro,cinco,10,12);
+        
+         uno = getDistance(trigPin1,echoPin1);
+         dos = getDistance(trigPin2,echoPin2);
+         medirDistanciaIzquierda(uno,dos,10,12);
          
-          Serial.println(cuatro); 
-          Serial.println(cinco);     
+          Serial.println(uno); 
+          Serial.println(dos);     
           
 
 }
