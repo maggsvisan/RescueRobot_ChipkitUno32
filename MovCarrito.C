@@ -8,7 +8,7 @@ long duration;
 int distance,uno,dos,tres,cuatro,cinco;
 volatile int count = 0; //esto estaba en 0
 int prev_val, curr_val;
-int c=16,x=1;
+int c=0,x=1;
 int q=1;
 int MotorDerecho=500;
 int MotorIzquierdo=500;
