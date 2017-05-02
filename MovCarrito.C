@@ -26,8 +26,8 @@ int fwd1,fwd2;
 int bck1,bck2;
 
 //echos y triggers ultrasonicos
-const int trigPin1=28;
-const int echoPin1=29;
+const int trigPin1=2;
+const int echoPin1=3;
 const int trigPin2=4;
 const int echoPin2=5;
 const int trigPin3=33;
@@ -83,8 +83,8 @@ void moveFwd()
   analogWrite(12, 0); 
   analogWrite(13, 1000); 
 
-  digitalWrite(9, 1);
-  digitalWrite(10, 1);
+  analogWrite(9, 1000); 
+  analogWrite(10, 1000);
 }
 
 
@@ -96,8 +96,8 @@ void moveBck()
   analogWrite(12, 1000); 
   analogWrite(13, 0); 
 
-  digitalWrite(9, 1);
-  digitalWrite(10, 1);
+  analogWrite(9, 1000); 
+  analogWrite(10, 1000);
 }
 
 
@@ -109,8 +109,9 @@ void rotateLeft()
   analogWrite(12, 0); 
   analogWrite(13, 1000); 
 
-  digitalWrite(9, 1);
-  digitalWrite(10, 1);
+  analogWrite(9, 1000); 
+  analogWrite(10, 1000);
+
 }
 
 void rotateRight()
@@ -155,45 +156,49 @@ int getDistance(int trigPin, int echoPin){
 
 
 void medirDistanciaIzquierda(int sensor1,int sensor2,int distmin,int distmax){
+  
   if (sensor1 > distmax && sensor2 > distmax )
-  {
-    MotorIzquierdo=150;
-    MotorDerecho=1000;
+  {  //Serial.println("lejos");
+     analogWrite(9, 150); //Jony lo había puesto en 500
+     analogWrite(10, 1000); 
   }
   else if (sensor1 < distmin && sensor2 < distmin )
   {
-    MotorIzquierdo=1000;
-    MotorDerecho=150;
+     //Serial.println("cerca");
+     analogWrite(9, 1000); 
+     analogWrite(10, 150); 
   }
   else
   {
-     MotorIzquierdo=1000;
-     MotorDerecho=1000;  
+   //  Serial.println("dentro");
+     analogWrite(9, 1000); 
+     analogWrite(10, 1000);  
    }
 }
+
+
 
 void medirDistanciaDerecha(int sensor1,int sensor2,int distmin,int distmax){
   
   if (sensor1 > distmax && sensor2 > distmax )
-  {
-   // MotorIzquierdo=150;  
-   // MotorDerecho=1000;
-     MotorIzquierdo=1000;  
-     MotorDerecho=150;
-
+  { // Serial.println("lejos");
+     analogWrite(9, 1000); 
+     analogWrite(10, 150); 
   }
   else if (sensor1 < distmin && sensor2 < distmin )
   {
-    
-    MotorIzquierdo=150;
-    MotorDerecho=500;
+     //Serial.println("cerca");
+     analogWrite(9, 150); 
+     analogWrite(10, 1000); 
   }
   else
   {
-     MotorIzquierdo=1000;
-     MotorDerecho=1000;  
+    // Serial.println("dentro");
+     analogWrite(9, 1000); 
+     analogWrite(10, 1000);  
    }
 }
+
 
 
 void loop() 
@@ -204,11 +209,14 @@ void loop()
  //tres = getDistance(trigPin3,echoPin3); //centro
  //cuatro = getDistance(trigPin4,echoPin4);//izq del
  //cinco = getDistance(trigPin5,echoPin5);//izq tras
- 
-  //Serial.println(uno);
-  //Serial.println(dos);
+ // Serial.print("uno : ");
+ // Serial.println(uno);
+ // Serial.print("dis : ");
+ // Serial.println(dos);
+ // Serial.print("cuatro : ");
   //Serial.println(tres);
-  //Serial.println(cuatro); 
+ // Serial.println(cuatro);
+ //Serial.print("cinco : "); 
   //Serial.println(cinco); 
   
   Serial.println(c);
@@ -221,9 +229,11 @@ void loop()
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,10,15);
+          medirDistanciaDerecha(cuatro,cinco,8,11);
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos = getDistance(trigPin2,echoPin2); //der del
+          Serial.println(uno);
+          Serial.println(dos);
           if (uno > 20 && dos > 20){//checa hueco
             c=1;
             q=1;
@@ -240,7 +250,6 @@ void loop()
           c=2;
           break;
     case 2:
-          uno=getDistance(trigPin1,echoPin1);
           if (count > 1850){
             c=3;
           }
@@ -250,39 +259,76 @@ void loop()
           moveFwd();
           tres = getDistance(trigPin3,echoPin3); //centro
          
-          if(tres < 8)
+          if(tres < 12)
             c=4;
           break;
     case 4:
-          digitalWrite(dir1PinB, LOW);
-          digitalWrite(dir2PinB, LOW);
-          digitalWrite(dir1PinA, LOW);
-          digitalWrite(dir2PinA, LOW);
           rotateRight();
           count=0;
           c=5;
           break;
     case 5:
-//          tres = getDistance(trigPin3,echoPin3);
-          if(count>2350)
-            c=6;
+          if(count>1850)
+            c=13;
           break;
     case 6:
-          digitalWrite(dir1PinB, LOW);
-          digitalWrite(dir2PinB, LOW);
-          digitalWrite(dir1PinA, LOW);
-          digitalWrite(dir2PinA, LOW);
           if(q){
             moveFwd();
-            q=1;
+            q=0;
+          }
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          medirDistanciaDerecha(cuatro,cinco,10,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          uno=getDistance(trigPin1,echoPin1);// der  tras
+          dos = getDistance(trigPin2,echoPin2); //der del    
+            if(uno >25  && dos >25 ){
+               q=1;
+               c=13;
+            }
+          break;
+     case 13:
+         if(q){
+            moveFwd();
+            q=0;
+          }
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          uno=getDistance(trigPin1,echoPin1);// der  tras
+          dos = getDistance(trigPin2,echoPin2); //der del  
+            if(uno <25  && dos <25 ){
+               q=1;
+               c=14;
+            }
+          break;
+     case 14:
+          if(q){
+            moveFwd();
+            q=0;
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
           tres = getDistance(trigPin3,echoPin3); //centro
-          medirDistanciaDerecha(cuatro,cinco,10,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
-              
+          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          uno=getDistance(trigPin1,echoPin1);// der  tras
+          dos = getDistance(trigPin2,echoPin2); //der del 
+            if(uno >25  && dos >25 ){
+               q=1;
+               c=15;
+            }
+          break;
+    case 15:
+          if(q){
+            moveFwd();
+            q=0;
+          }
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          tres = getDistance(trigPin3,echoPin3); //centro
+          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          Serial.print("Sensor 3: ");
+          Serial.println(tres);    
             if(tres < 20){
-               //count=0; //inicializar timer
                q=1;
                c=7;
             }
@@ -300,61 +346,49 @@ void loop()
           c=9;
           break;
     case 9:
-          if (count > 4650)
+          if (count > 3810)
             c=10;
           break;
           
     case 10:
-          digitalWrite(dir1PinB, LOW);
-          digitalWrite(dir2PinB, LOW);
-          digitalWrite(dir1PinA, LOW);
-          digitalWrite(dir2PinA, LOW);
           if(q){
             moveFwd();
-            q=1;
+            q=0;
           }
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos=getDistance(trigPin2,echoPin2); //der del
-          medirDistanciaIzquierda(uno,dos,10,15);
-//          if(uno > 20 || dos > 20)
-            if (uno > 20){
+          medirDistanciaIzquierda(uno,dos,8,10);
+          if(uno > 20 || dos > 20){
               q=1;
               c=11;
             }
           break;
     case 11:
-          digitalWrite(dir1PinB, LOW);
-          digitalWrite(dir2PinB, LOW);
-          digitalWrite(dir1PinA, LOW);
-          digitalWrite(dir2PinA, LOW);
           if(q){
             moveFwd();
-            q=1;
+            q=0;
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,10,15);
+          medirDistanciaDerecha(cuatro,cinco,8,11);
           tres = getDistance(trigPin3,echoPin3); //centro
-          if (tres< 10){
+          if (tres< 12){
             q=1;
             c=12;
           }
           break;
+          
     case 12:
-          digitalWrite(dir1PinB, LOW);
-          digitalWrite(dir2PinB, LOW);
-          digitalWrite(dir1PinA, LOW);
-          digitalWrite(dir2PinA, LOW);
           fullStop(); //entran rutinas para dejar victima en su lugar
           break;
          
     default:
           fullStop();
           break;
-
+    }
   }
 
-}
+
 
 
 
