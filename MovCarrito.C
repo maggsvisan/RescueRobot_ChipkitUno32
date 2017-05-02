@@ -229,7 +229,7 @@ void loop()
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,8,11);
+          medirDistanciaDerecha(cuatro,cinco,12,15);
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos = getDistance(trigPin2,echoPin2); //der del
           Serial.println(uno);
@@ -268,7 +268,7 @@ void loop()
           c=5;
           break;
     case 5:
-          if(count>1850)
+          if(count>1750)
             c=13;
           break;
     case 6:
@@ -293,7 +293,7 @@ void loop()
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          medirDistanciaDerecha(cuatro,cinco,9,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos = getDistance(trigPin2,echoPin2); //der del  
             if(uno <25  && dos <25 ){
@@ -309,7 +309,7 @@ void loop()
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
           tres = getDistance(trigPin3,echoPin3); //centro
-          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          medirDistanciaDerecha(cuatro,cinco,9,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos = getDistance(trigPin2,echoPin2); //der del 
             if(uno >25  && dos >25 ){
@@ -346,7 +346,7 @@ void loop()
           c=9;
           break;
     case 9:
-          if (count > 3810)
+          if (count > 3500)
             c=10;
           break;
           
@@ -357,7 +357,7 @@ void loop()
           }
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos=getDistance(trigPin2,echoPin2); //der del
-          medirDistanciaIzquierda(uno,dos,8,10);
+          medirDistanciaIzquierda(uno,dos,7,9);
           if(uno > 20 || dos > 20){
               q=1;
               c=11;
@@ -370,7 +370,7 @@ void loop()
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,8,11);
+          medirDistanciaDerecha(cuatro,cinco,12,15);
           tres = getDistance(trigPin3,echoPin3); //centro
           if (tres< 12){
             q=1;
