@@ -7,7 +7,7 @@
 
 #include <Servo.h>
 #define sensor AD0 // define Sharp 
-int c=61;      // Victima 1 = 0
+int c=39;      // Victima 1 = 0
               //victima 2 =13
               //victima 3 = 39
 int victimaON = 0;
@@ -796,7 +796,7 @@ void loop()
           }
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos=getDistance(trigPin2,echoPin2); //der del
-          medirDistanciaIzquierda(uno,dos,9,11);
+          medirDistanciaIzquierda(uno,dos,12,15);
           if(uno >20 && dos>20){
             q=1;
             c=65;
