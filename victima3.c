@@ -4,6 +4,13 @@
  
 #include <plib.h> /* this gives the i/o definitions */
 #endif
+
+#include <Servo.h>
+#define sensor A0 // define Sharp 
+
+int victimaON = 0;
+Servo ServoAlfa;
+Servo ServoBeta;
 long duration;
 int distance,uno,dos,tres,cuatro,cinco;
 volatile int count = 0; //esto estaba en 0
@@ -12,7 +19,8 @@ int c=0,x=1;
 int q=1;
 int MotorDerecho=500;
 int MotorIzquierdo=500;
-
+float volts;
+int sharp;
 const int speed1 = 9;
 const int speed2 = 10;
 
@@ -36,7 +44,18 @@ const int trigPin4=34;
 const int echoPin4=35;
 const int trigPin5=36;
 const int echoPin5=37;
-                                                 
+
+/// validateVictim
+int AnPin = 0;
+int val2,i=0;
+int distanceSharp=0;
+int totalDistanceSharp=0;
+int avgDistanceSharp=0;
+bool victim=false;
+int distSharp=0; //valida si es una victima
+bool detect=0;
+int correccion=0;
+////                                
                            
 void setup() 
 {
@@ -67,14 +86,37 @@ void setup()
   //Timer setup---------------------------------------------------------------------------------------------------------------------------------------------------------
   OpenTimer3( T3_ON | T3_PS_1_1 | T3_SOURCE_INT, 0xFFFFFF);
   ConfigIntTimer3((T3_INT_ON | T3_INT_PRIOR_3));
-  //---------------------------------------------------------------------------------------------------------------------------------------------------------
-  
-  
-  
-} 
+  //-------------------------------------------------------------------------------------------------------------------------------------------------------- 
+}
+int mideSharp(){
+  do{
+     val2 = analogRead(AnPin);
+     distanceSharp = (2914 / (val2 + 5)) - 1;
+     totalDistanceSharp+=distanceSharp;
+     i++;
+   }while (i<30);
+   avgDistanceSharp= totalDistanceSharp/20;
+   totalDistanceSharp=0;
+   i=0;
+   return avgDistanceSharp;
 
+}
+bool validateVictim(){
+  distSharp=mideSharp();
+  tres=getDistance(trigPin,echoPin);
+  correccion=tres+2;
+  if (distSharp == correccion){
+    victim=false; //es pared
+    Serial.println("PARED");
+  }
+  else if (distSharp <= 6){
+    victim=true;
+    Serial.println("Victima");
+  }
 
-
+  else
+    victim=false;
+}
 void moveFwd()
 {
   analogWrite(38, 0); 
@@ -86,8 +128,6 @@ void moveFwd()
   analogWrite(9, 1000); 
   analogWrite(10, 1000);
 }
-
-
 void moveBck()
 {
   analogWrite(38, 1000); 
@@ -99,8 +139,6 @@ void moveBck()
   analogWrite(9, 1000); 
   analogWrite(10, 1000);
 }
-
-
 void rotateLeft()
 {
   analogWrite(38, 1000); 
@@ -113,7 +151,6 @@ void rotateLeft()
   analogWrite(10, 1000);
 
 }
-
 void rotateRight()
 {
   analogWrite(38, 0); 
@@ -125,7 +162,6 @@ void rotateRight()
   digitalWrite(9, 1);
   digitalWrite(10, 1);
 }
-
 void fullStop()
 {
   analogWrite(38, 0); 
@@ -133,16 +169,11 @@ void fullStop()
 
   analogWrite(12, 0); 
   analogWrite(13, 0); 
-
 }
-
-
 int getDistance(int trigPin, int echoPin){
   long duration=0;  
   int distance=0;
-  
   for(int i=0;i<=20;i++){
-  
     digitalWrite(trigPin,HIGH);
     delay(2);
     digitalWrite(trigPin,LOW);
@@ -151,59 +182,44 @@ int getDistance(int trigPin, int echoPin){
   distance = duration*0.034/2/20;
   return distance;
 }
-
-
-
-
 void medirDistanciaIzquierda(int sensor1,int sensor2,int distmin,int distmax){
   
   if (sensor1 > distmax && sensor2 > distmax )
-  {  //Serial.println("lejos");
-     analogWrite(9, 150); //Jony lo había puesto en 500
+  {
+     analogWrite(9, 150);
      analogWrite(10, 1000); 
   }
   else if (sensor1 < distmin && sensor2 < distmin )
   {
-     //Serial.println("cerca");
      analogWrite(9, 1000); 
      analogWrite(10, 150); 
   }
   else
   {
-   //  Serial.println("dentro");
      analogWrite(9, 1000); 
      analogWrite(10, 1000);  
    }
 }
-
-
-
 void medirDistanciaDerecha(int sensor1,int sensor2,int distmin,int distmax){
   
   if (sensor1 > distmax && sensor2 > distmax )
-  { // Serial.println("lejos");
+  { 
      analogWrite(9, 1000); 
      analogWrite(10, 150); 
   }
   else if (sensor1 < distmin && sensor2 < distmin )
   {
-     //Serial.println("cerca");
      analogWrite(9, 150); 
      analogWrite(10, 1000); 
   }
   else
   {
-    // Serial.println("dentro");
      analogWrite(9, 1000); 
      analogWrite(10, 1000);  
    }
 }
-
-
-
 void loop() 
 {
-
  //uno=getDistance(trigPin1,echoPin1);// der  tras
  //dos = getDistance(trigPin2,echoPin2); //der del
  //tres = getDistance(trigPin3,echoPin3); //centro
@@ -218,9 +234,8 @@ void loop()
  // Serial.println(cuatro);
  //Serial.print("cinco : "); 
   //Serial.println(cinco); 
- 
-  Serial.println(c);
   
+  Serial.println(c);
   switch(c){
     case 0:
           if(q){
@@ -688,13 +703,17 @@ void loop()
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          tres = getDistance(trigPin3,echoPin3); //centro
           medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
-          uno=getDistance(trigPin1,echoPin1);// der  tras
-          dos = getDistance(trigPin2,echoPin2); //der del 
-            if(uno >25  && dos >25 ){
+
+          detect=validateVictim();
+          tres=getDistance(trigPin3,echoPin3);
+          if(detect){
+            c=58;
+            q=1;
+          }
+          if(tres <12){
                q=1;
-               c=58;
+               c=74;
             }
           break;
 //---------------------VICTIMA 3-------CASO 1
@@ -965,6 +984,7 @@ void loop()
           fullStop();
           break;
     }
+    
   }
 
 
