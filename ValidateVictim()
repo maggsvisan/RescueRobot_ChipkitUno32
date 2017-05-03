@@ -1,0 +1,91 @@
+#include <Servo.h>
+#define sensor A0 // define Sharp
+
+const int trigPin = 33; //Definicion de ultrasonico frontal
+const int echoPin = 32;
+
+
+// variables sharp //
+int AnPin = 0;                                    // analog pin for reading the IR sensor
+int val2,i=0;             // outgoing ADC value
+int distance = 0;
+int totalDistance=0;
+int avgDistance=0;
+int tres;
+/// validateVictim
+bool victim=false;
+int distSharp=0; //valida si es una victima
+bool detect=0;
+int correccion=0;
+////
+
+int mideSharp(){
+  do{
+     // read analog input:
+     val2 = analogRead(AnPin);
+     // Calculate linear slope
+     distance = (2914 / (val2 + 5)) - 1;
+     totalDistance+=distance;
+     i++;
+   }while (i<30);
+
+   avgDistance= totalDistance/20;
+   i=0;
+
+   return avgDistance;
+
+}
+
+bool validateVictim(){
+  distSharp=mideSharp();
+  tres=getDistance(trigPin,echoPin);
+  correccion=tres+2;
+  if (distSharp > 6 && correccion < 14){
+    victim=false; //es pared
+    Serial.println("PARED");
+  }
+  else if (distSharp <= 6 && correccion >6){
+    victim=true;
+    Serial.println("VICTIM");
+  }
+
+  else
+    victim=false;
+}
+
+int getDistance(int trigPin, int echoPin){
+  long duration=0;  
+  int distance=0;
+  for(int i=0;i<=20;i++){
+    digitalWrite(trigPin,HIGH);
+    delay(2);
+    digitalWrite(trigPin,LOW);
+    duration += pulseIn(echoPin, HIGH); 
+  }
+  distance = duration*0.034/2/20;
+  return distance;
+}
+
+void setup() {
+   pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
+
+}
+
+
+
+void loop()
+{
+  avgDistance=0;
+  totalDistance=0;
+  tres=getDistance(trigPin,echoPin);
+  distSharp = mideSharp();
+  Serial.print("TRES: ");
+  Serial.println(tres+2);
+  Serial.print("SHARP :");
+  Serial.println(distSharp);
+  Serial.println(" ? ");
+  detect=validateVictim();
+  delay(1000);
+}
