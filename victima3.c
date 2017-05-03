@@ -6,8 +6,10 @@
 #endif
 
 #include <Servo.h>
-#define sensor A0 // define Sharp 
-
+#define sensor AD0 // define Sharp 
+int c=61;      // Victima 1 = 0
+              //victima 2 =13
+              //victima 3 = 39
 int victimaON = 0;
 Servo ServoAlfa;
 Servo ServoBeta;
@@ -15,9 +17,9 @@ long duration;
 int distance,uno,dos,tres,cuatro,cinco;
 volatile int count = 0; //esto estaba en 0
 int prev_val, curr_val;
-int c=0,x=1;
+int x=1;
 int q=1;
-int MotorDerecho=500;
+int MotorDerecho=500; 
 int MotorIzquierdo=500;
 float volts;
 int sharp;
@@ -87,6 +89,28 @@ void setup()
   OpenTimer3( T3_ON | T3_PS_1_1 | T3_SOURCE_INT, 0xFFFFFF);
   ConfigIntTimer3((T3_INT_ON | T3_INT_PRIOR_3));
   //-------------------------------------------------------------------------------------------------------------------------------------------------------- 
+  //--------POSICION ININCIAL DEL SERVO ALFA-------
+  ServoAlfa.attach(7);
+  ServoAlfa.write(44); //posicion neutral
+}
+void tomarVictima()
+{
+    ServoAlfa.write(44); //Bajar
+    delay(500);
+    ServoBeta.write(45); //Cerrar
+    delay(500);
+    ServoAlfa.write(50); //Subir
+    delay(500);
+}
+
+void dejarVictima()
+{
+    ServoAlfa.write(44);  //Bajar
+    delay(500);
+    ServoBeta.write(105); //Abrir
+    delay(500);
+    ServoAlfa.write(47);  //Neutral
+    delay(500);
 }
 int mideSharp(){
   do{
@@ -103,7 +127,7 @@ int mideSharp(){
 }
 bool validateVictim(){
   distSharp=mideSharp();
-  tres=getDistance(trigPin,echoPin);
+  tres=getDistance(trigPin3,echoPin3);
   correccion=tres+2;
   if (distSharp == correccion){
     victim=false; //es pared
@@ -116,6 +140,7 @@ bool validateVictim(){
 
   else
     victim=false;
+  return victim;
 }
 void moveFwd()
 {
@@ -559,7 +584,9 @@ void loop()
           break;
       case 38:
            fullStop();
+           delay(1000);
            c=39;
+           break;
 //VICTIMA 3---------------------------------------------------------------------      
       case 39:
             if(q){
@@ -571,7 +598,7 @@ void loop()
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
           medirDistanciaDerecha(cuatro,cinco,11,13);
-          if(uno > 20 && dos > 20){
+          if(uno > 25 && dos > 25){
             q=1;
             c=40;
           }
@@ -639,7 +666,7 @@ void loop()
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
           tres = getDistance(trigPin3,echoPin3); //centro
-          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          medirDistanciaDerecha(cuatro,cinco,10,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos = getDistance(trigPin2,echoPin2); //der del 
             if(uno >25  && dos >25 ){
@@ -657,23 +684,27 @@ void loop()
             c=50;
           }
           break;
-      case 50;
+      case 50:
           moveFwd();
-          count=0;
-          c=51;
-          break;
-      case 51:
-          if(count >=6500){
+          tres=getDistance(trigPin3,echoPin3);
+          
+          if(tres < 12)
             c=52;
-          }
+          //count=0;
           break;
+  /*    case 51:
+          if(count >=6000){
+            c=52;
+            count=0;
+          }
+          break;*/
       case 52:
           rotateRight();
           count=0;
-          c=53:
+          c=53;
           break;
       case 53:
-          if(count >=1850);
+          if(count >=2000)
           {
             c=54;
           }
@@ -681,16 +712,17 @@ void loop()
       case 54:
           moveFwd();
           tres=getDistance(trigPin3,echoPin3);
-          if(tres <15){
+          if(tres < 15){
             c=55;
           }
+          break;
       case 55:
           rotateLeft();
           count=0;
-          c=56:
+          c=56;
           break;
       case 56:
-          if(count >=1850);
+          if(count >=2350)
           {
             c=57;
           }
@@ -703,22 +735,26 @@ void loop()
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
-
+          medirDistanciaDerecha(cuatro,cinco,13,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          sharp=mideSharp();
+          Serial.print("Sharp");
+          Serial.println(sharp);
           detect=validateVictim();
           tres=getDistance(trigPin3,echoPin3);
-          if(detect){
-            c=58;
+          if(detect){ 
+            c=58;//58
             q=1;
           }
           if(tres <12){
                q=1;
-               c=74;
+               c=74;//74
             }
           break;
 //---------------------VICTIMA 3-------CASO 1
       case 58:
             fullStop();
+            tomarVictima();
+            delay(1000);
             c=59;
             break;
       case 59:
@@ -726,7 +762,7 @@ void loop()
             count=0;
             c=60;
       case 60:
-            if(count >=3810){
+            if(count >=4700){
               c=61;
             }
             break;
@@ -738,7 +774,7 @@ void loop()
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos=getDistance(trigPin2,echoPin2); //der del
           tres=getDistance(trigPin3,echoPin3);
-          medirDistanciaIzquierda(uno,dos,9,11);
+          medirDistanciaIzquierda(uno,dos,13,15);
           if(tres < 12){
             q=1;
             c=62;
@@ -749,7 +785,7 @@ void loop()
             count=0;
             c=63;
       case 63:
-            if(count >=1850){
+            if(count >=2000){
               c=64;
             }
             break;
@@ -775,7 +811,7 @@ void loop()
               c=67;
             }
             break;
-      case 67;
+      case 67:
           moveFwd();
           count=0;
           c=68;
@@ -825,6 +861,8 @@ void loop()
             
       case 73:
             fullStop(); //entran rutinas para dejar victima en su lugar
+            dejarVictima();
+            delay(1000);
             c=96;//----inicio de victima 4
             break;
 //------------------VICTIMA 3 CASO 2------------------------
@@ -843,7 +881,7 @@ void loop()
             moveFwd();
             if(sharp <4)//------optico
             {
-              c=77:
+              c=77;
             }
             break;
       case 77://rtinas para recoger victima
@@ -927,7 +965,7 @@ void loop()
               c=89;
             }
             break;
-      case 89;
+      case 89:
           moveFwd();
           count=0;
           c=90;
@@ -973,8 +1011,7 @@ void loop()
               q=1;
               c=95;
             }
-            break;
-            
+            break;   
       case 95:
             fullStop(); //entran rutinas para dejar victima en su lugar
             c=96; //inicio de victima 4
@@ -983,14 +1020,8 @@ void loop()
       default:
           fullStop();
           break;
-    }
-    
+    } 
   }
-
-
-
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
