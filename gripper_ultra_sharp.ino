@@ -10,7 +10,7 @@ int val=0;
 //////
 
 // variables sharp //
-int AnPin = 2;                                    // analog pin for reading the IR sensor
+int AnPin = 0;                                    // analog pin for reading the IR sensor
 int val2,i=0;             // outgoing ADC value
 int distance = 0;
 int totalDistance=0;
@@ -19,8 +19,8 @@ int avgDistance=0;
 
 
 /// variables ultrasonico //
-const int echoPin1 = 7;
-const int trigPin1 = 8;
+const int echoPin1 = 32;
+const int trigPin1 = 33;
 ////
 
 int getDistance(int trigPin, int echoPin){
@@ -55,7 +55,7 @@ void loop() {
      distance = (2914 / (val2 + 5)) - 1;
      totalDistance+=distance;
      i++;
-   }while (i<20);
+   }while (i<30);
    
    avgDistance= totalDistance/20;
    i=0;
@@ -64,44 +64,17 @@ void loop() {
    int dist1;
    dist1=getDistance(trigPin1,echoPin1);//izq frontal
   /// 
-   
-   if (avgDistance <= 20){ // cerrar de gripper //
-      Serial.println ("Victima a la vista");
-      servoAngle=4;
-      Serial.println(servoAngle); 
-      myservo.write(servoAngle);  // sets the servo position according to the scaled value 
-      delay(200);  // waits for the servo to get there 
-   }
-   
-   else if(dist1 <=20) {  // abrir de gripper //
-      Serial.println ("Detecta refugio");
-      servoAngle=90;
-      Serial.println(servoAngle); 
-      myservo.write(servoAngle);  // sets the servo position according to the scaled value 
-      delay(200);  // waits for the servo to get there 
-   }
-   
-   /*
-   else{
-     servoAngle=90;
-     Serial.println(servoAngle); 
-     myservo.write(servoAngle);  // sets the servo position according to the scaled value 
-     delay(200);  // waits for the servo to get there 
-      Serial.println ("No esta viendo nada");
-   }
-   */
     
-   Serial.println ("Analog Value =");
+   Serial.print("Analog Value: ");
    Serial.println (avgDistance);
-   Serial.println("\n\r");
-    
+   Serial.print("Ultra: ");
+   Serial.println(dist1);
    avgDistance=0;
    totalDistance=0;
    
    // wait 10ms for ADC to reset before next reading:
    delay(1000);  
 }
-
 
 
 
