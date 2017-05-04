@@ -516,7 +516,7 @@ void loop()
           if(tres < 12)
             c=29;
           break;
-      case 29:
+    case 29:
          rotateRight();
           count=0;
           c=30;
@@ -872,13 +872,20 @@ void loop()
            c=75;
            break;
       case 75:
-           if(count >= 1850)
+           if(count >= 2000)
            {
             c=76;
            }
            break;
       case 76:
+            if(q){
             moveFwd();
+            }
+            analogWrite(38,150);
+            analogWrite(39,150);
+            cuatro = getDistance(trigPin4,echoPin4);//izq del
+            cinco = getDistance(trigPin5,echoPin5);//izq tras
+            medirDistanciaDerecha(cuatro,cinco,15,16);
             if(sharp <4)//------optico
             {
               c=77;
@@ -1014,9 +1021,612 @@ void loop()
             break;   
       case 95:
             fullStop(); //entran rutinas para dejar victima en su lugar
-            c=96; //inicio de victima 4
+            c=95; //inicio de victima 4
             break;
 //--------VICTIMA 4
+       case 96:
+          if(q){
+            moveBck();
+            q=0;
+          }
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          medirDistanciaDerecha(cuatro,cinco,8,11);
+          if(cuatro > 20 && cinco > 20){
+            q=1;
+            c=97;
+          }
+          break;
+    case 97:
+         rotateRight();
+          count=0;
+          c=98;
+          break;
+    case 98:
+          if (count > 1850)
+            c=99;
+          break;   
+    case  99:
+          moveFwd();
+          count=0;
+          c=100;
+          break;
+    case  100:
+          if (count > 6500){
+            c=101;
+          } 
+          break;
+    case 101:
+          rotateLeft();
+          count=0;
+          c=102;
+          break;   
+    case 102:
+          if(count >= 2000)
+          {
+            c=103;
+          }      
+          break;
+    case 103:
+          if(q){
+            moveFwd();
+            q=0;
+          }
+          uno=getDistance(trigPin1,echoPin1);// der  tras
+          dos=getDistance(trigPin2,echoPin2); //der del
+          medirDistanciaIzquierda(uno,dos,20,22);
+          detect=validateVictim();
+          tres=getDistance(trigPin3,echoPin3);
+          if(detect){ 
+            c=104;// detecta victima
+            q=1;
+          }
+          if(tres <8){
+               q=1;
+               c=121;//121
+            }
+          break;
+    case 104:
+          fullStop();
+          c=105;
+          break;
+    case 105:
+         if(q){
+            moveBck();
+            q=0;
+          }
+          uno = getDistance(trigPin1,echoPin1);//izq del
+          dos = getDistance(trigPin2,echoPin2);//izq tras
+          medirDistanciaIzquierda(uno,dos,20,22);
+          if(uno > 20 && dos > 20){
+            q=1;
+            c=106;
+          }
+          break;
+      case 106:
+          rotateLeft();
+          c=107;
+          count=0;
+          break;
+      case 107:
+          if(count >= 2000){
+            c=108;
+          }
+          break;
+      case 108:
+          moveFwd();
+          count=0;
+          c=109;
+          break;
+      case 109:
+          if(count>=6500){
+            c=110;
+          }
+          break;
+      case 110:
+         rotateRight();
+          count=0;
+          c=111;
+          break;
+    case 111:
+          if (count > 1850)
+            c=112;
+          break;   
+    case 112:
+          if(q){
+            moveFwd();
+            q=0;
+          }
+          uno=getDistance(trigPin1,echoPin1);// der  tras
+          dos=getDistance(trigPin2,echoPin2); //der del
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          medirDistanciaDerecha(cuatro,cinco,10,12);
+          if(uno > 20 && dos > 20){
+            q=1;
+            c=113;
+          }
+          break;
+      case 113:
+          rotateLeft();
+          count=0;
+          c=114;
+          break;   
+      case 114:
+          if(count >= 1850)
+          {
+            c=115;
+          }      
+          break;
+      case 115: 
+          moveFwd();
+          tres = getDistance(trigPin3,echoPin3); //centro
+          if(tres < 12)
+            c=116;
+          break;
+      case 116:
+          rotateLeft();
+          count=0;
+          c=117;
+          break;   
+      case 118:
+          if(count >= 1850)
+          {
+            c=119;
+          }      
+          break;
+      case 119:
+          if(q){
+            moveFwd();
+            q=0;
+          }
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          medirDistanciaDerecha(cuatro,cinco,11,13);
+          tres = getDistance(trigPin3,echoPin3); //centro
+          if (tres< 25){
+            q=1;
+            c=120;
+          }
+          break;
+      case 120:
+           fullStop();
+           delay(1000);//deja victima
+           c=121;
+           break;
+
+     ///// fin caso 1 VICTIMA 4
+
+    /// INICIO CASO 2 ____ VICTIMA 4
+      case 121:
+         if(q){
+            moveBck();
+            q=0;
+          }
+          uno = getDistance(trigPin1,echoPin1);//izq del
+          dos = getDistance(trigPin2,echoPin2);//izq tras
+          medirDistanciaIzquierda(uno,dos,20,22);
+          if(uno > 20 && dos > 20){
+            q=1;
+            c=122;
+          }
+          break;
+      case 122:
+          rotateLeft();
+          c=123;
+          count=0;
+          break;
+      case 123:
+          if(count >= 2000){
+            c=124;
+          }
+          break;
+      case 124:
+          moveFwd();
+          count=0;
+          c=125;
+          break;
+      case 125:
+          if(count>=6500){
+            c=126;
+          }
+          break;
+      case 126:
+          rotateLeft();
+          c=127;
+          count=0;
+          break;
+      case 127:
+          if(count >= 1850)
+          {
+            c=128;
+          }
+          break;
+      case 128:
+          if(q){
+            moveFwd();
+            q=0;
+          }
+          uno = getDistance(trigPin1,echoPin1);//izq del
+          dos = getDistance(trigPin2,echoPin2);//izq tras
+          medirDistanciaIzquierda(uno,dos,8,11);
+          if(uno < 25 && dos < 25){
+            q=1;
+            c=129;
+          }
+          break;
+
+        case 129:
+         if(q){
+            moveFwd();
+            q=0;
+          }
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          uno=getDistance(trigPin1,echoPin1);// der  tras
+          dos = getDistance(trigPin2,echoPin2); //der del  
+            if(uno > 20  && dos > 20 ){
+               q=1;
+               c=131;
+            }
+          break;
+     
+      case 131:
+          rotateLeft();
+          count=0;
+          c=132;
+          break;
+      case 132:
+          if(count >= 1850){
+            c=13;
+          }
+          break;
+      case 133 :
+          moveFwd();
+          //tres=getDistance(trigPin3,echoPin3);
+          count=0;
+          c=130;
+          //count=0;
+          break;
+         
+     case 130:
+            if(count >= 6500 ){
+              c=134;
+            }
+          break;
+      
+      case 134:
+          rotateRight();
+          count=0;
+          c=135;
+          break;
+
+      case 135:
+          if(count >=2000)
+          {
+            c=136;
+          }
+          break;
+      case 136:
+           if(q){
+            moveFwd();
+            q=0;
+          }
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          tres = getDistance(trigPin3,echoPin3); //centro
+          medirDistanciaDerecha(cuatro,cinco,10,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          
+            if(tres < 12 ){
+               q=1;
+               c=137;
+            }
+          break;
+
+          case 137:
+            rotateLeft();
+            count=0;
+            c=138;
+            break;
+            
+          case 138:
+            if(count >=2000)
+            {
+              c=139;
+            }
+            break;
+
+
+          case 139:
+             if(q){
+              moveFwd();
+              q=0;
+            }
+            cuatro = getDistance(trigPin4,echoPin4);//izq del
+            cinco = getDistance(trigPin5,echoPin5);//izq tras
+            tres = getDistance(trigPin3,echoPin3); //centro
+            medirDistanciaDerecha(cuatro,cinco,12,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+            
+              if(tres < 12 ){
+                 q=1;
+                 c=140;
+              }
+            break;
+
+           case 140:
+              rotateLeft();
+              count=0;
+              c=141;
+              break;
+              
+          case 141:
+              if(count >=2000)
+              {
+                c=142;
+              }
+              break;
+
+          case 142:
+             if(q){
+              moveFwd();
+              q=0;
+            }
+            cuatro = getDistance(trigPin4,echoPin4);//izq del
+            cinco = getDistance(trigPin5,echoPin5);//izq tras
+            medirDistanciaDerecha(cuatro,cinco,13,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+            
+            if(tres < 25){
+              c=143;   
+              q=1;         
+            }
+            break;
+
+          case 143:
+              rotateLeft();
+              count=0;
+              c=144;
+              break;
+              
+          case 144:
+              if(count >= 2000)
+                 c=145;
+              
+              break;
+
+        case 145:
+              if(q){
+              moveFwd();
+              q=0;
+            }
+            cuatro=getDistance(trigPin1,echoPin1);// der  tras
+            cinco=getDistance(trigPin2,echoPin2); //der del
+            medirDistanciaDerecha(cuatro,cinco,24,25);
+           
+            detect=validateVictim();
+            tres=getDistance(trigPin3,echoPin3);
+            if(detect){ 
+              c=146;// detecta victima
+              q=1;
+            }
+            
+            else { //bajar la velocidad
+                analogWrite(38, 150); 
+                analogWrite(39, 150); 
+                 q=1;
+            }
+            break;
+
+          case 146:
+              fullStop(); // rutinas de gripper
+              c=147;
+              break;
+
+          case 147:
+              rotateRight();
+              count=0;
+              c=148;
+              break;
+              
+          case 148:
+              if(count >=4700) //giro de 180 
+              {
+                c=149;
+              }
+              break;
+
+          case 149:
+              if(q){
+                moveFwd();
+                q=0;
+              }
+              uno = getDistance(trigPin1,echoPin1);//izq del
+              dos = getDistance(trigPin2,echoPin2);//izq tras
+              medirDistanciaDerecha(uno,dos,24,25);//el trigger es el optico,por mientras usamos el sensor de enfrente
+              if(tres < 12){
+                c=150;
+                q=1;
+              }
+              break;
+
+          case 150:
+              rotateRight();
+              count=0;
+              c=151;
+              break;
+
+          case 151:
+              if(count >= 2000)
+                c=152;
+              break;
+
+          
+          case 152:
+              if(q){
+              moveFwd();
+              q=0;
+            }
+
+            uno=getDistance(trigPin1,echoPin1);// der  tras
+            dos=getDistance(trigPin2,echoPin2); //der del
+            tres=getDistance(trigPin3,echoPin3);
+            medirDistanciaIzquierda(uno,dos,13,15);
+            if(tres < 12){
+              q=1;
+              c=153;
+            }
+            break;
+
+          case 153:
+                rotateRight();
+                count=0;
+                c=154;
+                break;
+
+          case 154:
+                if(count >=2000){
+                  c=155;
+                }
+              break;
+
+          case 155:
+              if(q){
+              moveFwd();
+              q=0;
+            }
+            cuatro=getDistance(trigPin4,echoPin4);// der  tras
+            cinco=getDistance(trigPin5,echoPin5); //der del
+            tres=getDistance(trigPin3,echoPin3);
+            medirDistanciaDerecha(cuatro,cinco,13,15);
+            if(tres < 12){
+              q=1;
+              c=156;
+            }
+            break;
+
+        case 156:
+           if(q){
+              moveFwd();
+              q=0;
+            }
+            cuatro = getDistance(trigPin4,echoPin4);//izq del
+            cinco = getDistance(trigPin5,echoPin5);//izq tras
+            medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+            uno=getDistance(trigPin1,echoPin1);// der  tras
+            dos = getDistance(trigPin2,echoPin2); //der del  
+              if(uno > 20  && dos > 20 ){
+                 q=1;
+                 c=157;
+              }
+            break;
+
+        case 157://separador
+              rotateLeft();
+              c=158;
+              count=0;
+              break;
+
+        case 158:
+              if(count >=2000){
+                c=159;
+              }
+              break;
+
+        case 159:
+            moveFwd();
+            count=0;
+            c=160;
+            break;
+
+        case 160:
+            if(count >=6500){
+              c=161;
+            }
+            break;
+
+        case 161:
+            rotateRight();
+            count=0;
+            c=162;
+            break;
+
+        case 162:
+            if(count >= 1850)
+            {
+              c=163;
+            }
+            break;
+     
+        case 163:
+          if(q){
+            moveFwd();
+            q=0;
+          }
+          uno=getDistance(trigPin1,echoPin1);// der  tras
+          dos=getDistance(trigPin2,echoPin2); //der del
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          medirDistanciaDerecha(cuatro,cinco,10,12);
+          if(uno > 20 && dos > 20){
+            q=1;
+            c=164;
+          }
+          break;
+
+      case 164:
+          rotateLeft();
+          count=0;
+          c=165;
+          break;
+
+      case 165:
+          if(count >= 1850)
+          {
+            c=166;
+          }      
+          break;
+
+      case 166: 
+          moveFwd();
+          tres = getDistance(trigPin3,echoPin3); //centro
+          if(tres < 12)
+            c=167;
+          break;
+      
+      case 167:
+          rotateLeft();
+          count=0;
+          c=168;
+          break;  
+
+      case 168:
+          if(count >= 1850)
+          {
+            c=169;
+          }      
+          break;
+
+      case 169:
+          if(q){
+            moveFwd();
+            q=0;
+          }
+          cuatro = getDistance(trigPin4,echoPin4);//izq del
+          cinco = getDistance(trigPin5,echoPin5);//izq tras
+          medirDistanciaDerecha(cuatro,cinco,11,13);
+          tres = getDistance(trigPin3,echoPin3); //centro
+          if (tres< 25){
+            q=1;
+            c=170;
+          }
+          break;
+
+      case 170:
+           fullStop();
+           delay(1000);
+          // c=39;
+           break;
+
       default:
           fullStop();
           break;
@@ -1035,5 +1645,7 @@ void __ISR(_TIMER_3_VECTOR,IPL3AUTO) comms_handler(void)
 #ifdef __cplusplus
 }
 #endif
+
+
 
 
