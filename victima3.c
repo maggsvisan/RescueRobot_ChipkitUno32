@@ -6,10 +6,11 @@
 #endif
 
 #include <Servo.h>
-#define sensor AD0 // define Sharp 
-int c=0;      // Victima 1 = 0
+//#define sensor AD2 // define Sharp 
+int c=96;      // Victima 1 = 0
               //victima 2 =13
               //victima 3 = 39
+              //victima 4 = 96
 int victimaON = 0;
 Servo ServoAlfa;
 Servo ServoBeta;
@@ -48,7 +49,7 @@ const int trigPin5=36;
 const int echoPin5=37;
 
 /// validateVictim
-int AnPin = 0;
+int AnPin = 2;
 int val2,i=0;
 int distanceSharp=0;
 int totalDistanceSharp=0;
@@ -114,30 +115,33 @@ void dejarVictima()
 }
 int mideSharp(){
   do{
-     val2 = analogRead(AnPin);
-     distanceSharp = (2914 / (val2 + 5)) - 1;
+     val2 = analogRead(AnPin)*0.0048828125;
+     distanceSharp = 13*pow(val2, -1);
      totalDistanceSharp+=distanceSharp;
      i++;
    }while (i<30);
-   avgDistanceSharp= totalDistanceSharp/20;
+  
+   //Serial.println(avgDistanceSharp);
+   avgDistanceSharp=totalDistanceSharp/30;
+   if(avgDistanceSharp < 0)
+    avgDistanceSharp=1000;
    totalDistanceSharp=0;
    i=0;
    return avgDistanceSharp;
 
 }
 bool validateVictim(){
-  distSharp=mideSharp();
   tres=getDistance(trigPin3,echoPin3);
   correccion=tres+2;
+  distSharp=mideSharp();
   if (distSharp == correccion){
     victim=false; //es pared
     Serial.println("PARED");
   }
-  else if (distSharp <= 6){
+  else if (distSharp <= 3){
     victim=true;
     Serial.println("Victima");
   }
-
   else
     victim=false;
   return victim;
@@ -1065,7 +1069,7 @@ void loop()
           c=100;
           break;
     case  100:
-          if (count > 6500){
+          if (count > 7000){
             c=101;
           } 
           break;
@@ -1094,7 +1098,7 @@ void loop()
             c=104;// detecta victima
             q=1;
           }
-          if(tres <8){
+          if(tres <30){
                q=1;
                c=121;//121
             }
@@ -1135,7 +1139,7 @@ void loop()
           c=109;
           break;
       case 109:
-          if(count>=6500){
+          if(count>=7000){
             c=110;
           }
           break;
@@ -1208,7 +1212,7 @@ void loop()
       case 120:
            fullStop();
            delay(1000);//deja victima
-           c=121;
+           c=1000;
            break;
 
      ///// fin caso 1 VICTIMA 4
@@ -1243,7 +1247,7 @@ void loop()
           c=125;
           break;
       case 125:
-          if(count>=6500){
+          if(count>=7000){
             c=126;
           }
           break;
@@ -1258,7 +1262,7 @@ void loop()
             c=128;
           }
           break;
-      case 128:
+     case 128: //sigue pared donde hay hueco
           if(q){
             moveFwd();
             q=0;
@@ -1271,6 +1275,7 @@ void loop()
             c=129;
           }
           break;
+    
 
         case 129:
          if(q){
@@ -1295,22 +1300,22 @@ void loop()
           break;
       case 132:
           if(count >= 1850){
-            c=13;
+           // c=13; este era el error
+            c=133;
           }
           break;
       case 133 :
           moveFwd();
-          //tres=getDistance(trigPin3,echoPin3);
-          count=0;
-          c=130;
-          //count=0;
+          tres=getDistance(trigPin3,echoPin3);
+          
+          if(tres < 12)
+            c=134;
           break;
-         
-     case 130:
-            if(count >= 6500 ){
+    /* case 130:
+            if(count >= 7000 ){
               c=134;
             }
-          break;
+          break;*/
       
       case 134:
           rotateRight();
@@ -1332,9 +1337,9 @@ void loop()
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
           tres = getDistance(trigPin3,echoPin3); //centro
-          medirDistanciaDerecha(cuatro,cinco,10,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          medirDistanciaDerecha(cuatro,cinco,13,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
           
-            if(tres < 12 ){
+            if(tres < 15 ){
                q=1;
                c=137;
             }
@@ -1362,9 +1367,9 @@ void loop()
             cuatro = getDistance(trigPin4,echoPin4);//izq del
             cinco = getDistance(trigPin5,echoPin5);//izq tras
             tres = getDistance(trigPin3,echoPin3); //centro
-            medirDistanciaDerecha(cuatro,cinco,12,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+            medirDistanciaDerecha(cuatro,cinco,13,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
             
-              if(tres < 12 ){
+              if(tres <= 15 ){ 
                  q=1;
                  c=140;
               }
@@ -1377,7 +1382,7 @@ void loop()
               break;
               
           case 141:
-              if(count >=2000)
+              if(count > 2000)
               {
                 c=142;
               }
@@ -1390,80 +1395,78 @@ void loop()
             }
             cuatro = getDistance(trigPin4,echoPin4);//izq del
             cinco = getDistance(trigPin5,echoPin5);//izq tras
+            
             medirDistanciaDerecha(cuatro,cinco,13,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
             
-            if(tres < 25){
-              c=143;   
-              q=1;         
+            tres=getDistance(trigPin3,echoPin3);
+            if(tres < 25){ 
+              c=143; // detecta pared 
+              q=1;
             }
+               
             break;
+
+//case de validacion de victima o no
 
           case 143:
               rotateLeft();
               count=0;
               c=144;
               break;
-              
-          case 144:
-              if(count >= 2000)
-                 c=145;
-              
-              break;
 
-        case 145:
-              if(q){
-              moveFwd();
-              q=0;
-            }
-            cuatro=getDistance(trigPin1,echoPin1);// der  tras
-            cinco=getDistance(trigPin2,echoPin2); //der del
-            medirDistanciaDerecha(cuatro,cinco,24,25);
+          case 144:
+              if (count >= 2200)
+                c=145;
+              break;        
            
+          case 145:
+            if(q){
+            moveFwd();
+            q=0;
+            }
+            cuatro = getDistance(trigPin4,echoPin4);
+            cinco = getDistance(trigPin5,echoPin5);
+            medirDistanciaDerecha(cuatro,cinco,19,20);
             detect=validateVictim();
-            tres=getDistance(trigPin3,echoPin3);
+            
             if(detect){ 
-              c=146;// detecta victima
+              c=146;// rutinas de gripper
               q=1;
             }
-            
-            else { //bajar la velocidad
-                analogWrite(38, 150); 
-                analogWrite(39, 150); 
-                 q=1;
-            }
             break;
-
+      
+          //// correccion de cases
           case 146:
-              fullStop(); // rutinas de gripper
+              fullStop();
+              delay(1000);
               c=147;
               break;
 
           case 147:
-              rotateRight();
+              rotateLeft();
               count=0;
               c=148;
               break;
-              
+
           case 148:
-              if(count >=4700) //giro de 180 
-              {
-                c=149;
-              }
+              if(count >= 4700)
+                 c=149;
               break;
 
-          case 149:
+        case 149:
               if(q){
-                moveFwd();
-                q=0;
-              }
-              uno = getDistance(trigPin1,echoPin1);//izq del
-              dos = getDistance(trigPin2,echoPin2);//izq tras
-              medirDistanciaDerecha(uno,dos,24,25);//el trigger es el optico,por mientras usamos el sensor de enfrente
-              if(tres < 12){
-                c=150;
-                q=1;
-              }
-              break;
+              moveFwd();
+              q=0;
+            }
+            uno=getDistance(trigPin1,echoPin1);
+            dos=getDistance(trigPin2,echoPin2);
+            medirDistanciaIzquierda(uno,dos,18,20);
+            tres=getDistance(trigPin3,echoPin3);
+            if(tres <= 15){ 
+              c=150;  
+              q=1;
+            }
+            break;
 
           case 150:
               rotateRight();
@@ -1476,18 +1479,16 @@ void loop()
                 c=152;
               break;
 
-          
           case 152:
               if(q){
               moveFwd();
               q=0;
             }
-
             uno=getDistance(trigPin1,echoPin1);// der  tras
             dos=getDistance(trigPin2,echoPin2); //der del
             tres=getDistance(trigPin3,echoPin3);
             medirDistanciaIzquierda(uno,dos,13,15);
-            if(tres < 12){
+            if(tres < 15){
               q=1;
               c=153;
             }
@@ -1514,115 +1515,123 @@ void loop()
             cinco=getDistance(trigPin5,echoPin5); //der del
             tres=getDistance(trigPin3,echoPin3);
             medirDistanciaDerecha(cuatro,cinco,13,15);
-            if(tres < 12){
+            if(tres < 15){
               q=1;
               c=156;
             }
             break;
 
         case 156:
+                rotateRight();
+                count=0;
+                c=157;
+                break;
+
+          case 157:
+                if(count >=2000){
+                  c=158;
+                }
+                break;
+
+        case 158:
            if(q){
               moveFwd();
               q=0;
             }
-            cuatro = getDistance(trigPin4,echoPin4);//izq del
-            cinco = getDistance(trigPin5,echoPin5);//izq tras
-            medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
             uno=getDistance(trigPin1,echoPin1);// der  tras
-            dos = getDistance(trigPin2,echoPin2); //der del  
+            dos = getDistance(trigPin2,echoPin2); //der del
+            medirDistanciaDerecha(uno,dos,13,15);  
               if(uno > 20  && dos > 20 ){
                  q=1;
-                 c=157;
+                 c=159;
               }
             break;
 
-        case 157://separador
+        case 159:
               rotateLeft();
-              c=158;
+              c=160;
               count=0;
               break;
 
-        case 158:
+        case 160:
               if(count >=2000){
-                c=159;
+                c=161;
               }
               break;
 
-        case 159:
-            moveFwd();
-            count=0;
-            c=160;
-            break;
-
-        case 160:
-            if(count >=6500){
-              c=161;
-            }
-            break;
-
         case 161:
-            rotateRight();
+            moveFwd();
             count=0;
             c=162;
             break;
 
         case 162:
-            if(count >= 1850)
-            {
+            if(count >=7000){
               c=163;
             }
             break;
-     
+
         case 163:
+            rotateRight();
+            count=0;
+            c=164;
+            break;
+
+        case 164:
+            if(count >= 1850)
+            {
+              c=165;
+            }
+            break;
+     
+        case 165:
           if(q){
             moveFwd();
             q=0;
           }
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos=getDistance(trigPin2,echoPin2); //der del
-          cuatro = getDistance(trigPin4,echoPin4);//izq del
-          cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,10,12);
+          medirDistanciaIzquierda(uno,dos,11,13);
           if(uno > 20 && dos > 20){
             q=1;
-            c=164;
+            c=166;
           }
           break;
 
-      case 164:
+      case 166:
           rotateLeft();
           count=0;
-          c=165;
+          c=167;
           break;
 
-      case 165:
+      case 167:
           if(count >= 1850)
           {
-            c=166;
+            c=168;
           }      
           break;
 
-      case 166: 
+      case 168: 
           moveFwd();
           tres = getDistance(trigPin3,echoPin3); //centro
-          if(tres < 12)
-            c=167;
+          if(tres < 13)
+            c=169;
           break;
       
-      case 167:
+      case 169:
           rotateLeft();
           count=0;
-          c=168;
+          c=170;
           break;  
 
-      case 168:
+      case 170:
           if(count >= 1850)
           {
-            c=169;
+            c=171;
           }      
           break;
 
-      case 169:
+      case 171:
           if(q){
             moveFwd();
             q=0;
@@ -1631,13 +1640,13 @@ void loop()
           cinco = getDistance(trigPin5,echoPin5);//izq tras
           medirDistanciaDerecha(cuatro,cinco,11,13);
           tres = getDistance(trigPin3,echoPin3); //centro
-          if (tres< 25){
+          if (tres < 25){
             q=1;
-            c=170;
+            c=172;
           }
           break;
 
-      case 170:
+      case 172:
            fullStop();
            delay(1000);
           // c=39;
