@@ -722,7 +722,7 @@ void loop()
           c=56;
           break;
       case 56:
-          if(count >=2350)
+          if(count >=2000)
           {
             c=57;
           }
@@ -745,7 +745,7 @@ void loop()
             c=58;//58
             q=1;
           }
-          if(tres <12){
+          if(tres <16){
                q=1;
                c=74;//74
             }
@@ -851,9 +851,9 @@ void loop()
             }
             cuatro = getDistance(trigPin4,echoPin4);//izq del
             cinco = getDistance(trigPin5,echoPin5);//izq tras
-            medirDistanciaDerecha(cuatro,cinco,8,11);
+            medirDistanciaDerecha(cuatro,cinco,13,15);
             tres = getDistance(trigPin3,echoPin3); //centro
-            if (tres< 12){
+            if (tres < 25){
               q=1;
               c=73;
             }
@@ -906,7 +906,7 @@ void loop()
             break;
 
       case 78:
-            rotateRight();
+            rotateLeft();
             count=0;
             c=79;
             break;
@@ -924,9 +924,9 @@ void loop()
             }
             uno=getDistance(trigPin1,echoPin1);// der  tras
             dos=getDistance(trigPin2,echoPin2); //der del
-            medirDistanciaIzquierda(uno,dos,8,10);
+            medirDistanciaIzquierda(uno,dos,9,11);
             tres= getDistance(trigPin3,echoPin3);
-            if(tres <=12){
+            if(tres <=20){
                 q=1;
                 c=81;
               }
@@ -936,7 +936,7 @@ void loop()
             count=0;
             c=82;
       case 82:
-            if(count >=1850){
+            if(count >=2000){
               c=83;
             }
             break;
@@ -947,7 +947,7 @@ void loop()
             }
             uno=getDistance(trigPin1,echoPin1);// der  tras
             dos=getDistance(trigPin2,echoPin2); //der del
-            medirDistanciaIzquierda(uno,dos,8,10);
+            medirDistanciaIzquierda(uno,dos,9,11);
             tres= getDistance(trigPin3,echoPin3);
             if(tres <=12){
                 q=1;
@@ -1012,7 +1012,7 @@ void loop()
             }
             uno=getDistance(trigPin1,echoPin1);// der  tras
             dos=getDistance(trigPin2,echoPin2); //der del
-            medirDistanciaIzquierda(uno,dos,8,10);
+            medirDistanciaIzquierda(uno,dos,9,10);
             if(uno > 20 || dos > 20){
                 q=1;
                 c=94;
@@ -1025,7 +1025,7 @@ void loop()
             }
             cuatro = getDistance(trigPin4,echoPin4);//izq del
             cinco = getDistance(trigPin5,echoPin5);//izq tras
-            medirDistanciaDerecha(cuatro,cinco,8,11);
+            medirDistanciaDerecha(cuatro,cinco,9,10);
             tres = getDistance(trigPin3,echoPin3); //centro
             if (tres< 12){
               q=1;
@@ -1661,8 +1661,3 @@ void __ISR(_TIMER_3_VECTOR,IPL3AUTO) comms_handler(void)
 #ifdef __cplusplus
 }
 #endif
-
-
-
-
-a
