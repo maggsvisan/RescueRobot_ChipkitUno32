@@ -597,7 +597,7 @@ void loop()
           dos=getDistance(trigPin2,echoPin2); //der del
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,11,13);
+          medirDistanciaDerecha(cuatro,cinco,13,14);
           if(uno > 25 && dos > 25){
             q=1;
             c=40;
@@ -650,7 +650,7 @@ void loop()
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          medirDistanciaDerecha(cuatro,cinco,8,11);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          medirDistanciaDerecha(cuatro,cinco,10,14);//el trigger es el optico,por mientras usamos el sensor de enfrente
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos = getDistance(trigPin2,echoPin2); //der del  
             if(uno <25  && dos <25 ){
@@ -666,7 +666,7 @@ void loop()
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
           tres = getDistance(trigPin3,echoPin3); //centro
-          medirDistanciaDerecha(cuatro,cinco,10,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          medirDistanciaDerecha(cuatro,cinco,11,13);//el trigger es el optico,por mientras usamos el sensor de enfrente
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos = getDistance(trigPin2,echoPin2); //der del 
             if(uno >25  && dos >25 ){
@@ -680,7 +680,7 @@ void loop()
           c=49;
           break;
       case 49:
-          if(count >= 1850){
+          if(count >= 1750){
             c=50;
           }
           break;
@@ -875,17 +875,18 @@ void loop()
            if(count >= 2000)
            {
             c=76;
+            q=1;
            }
            break;
       case 76:
             if(q){
             moveFwd();
+            q=0;
             }
-            analogWrite(38,150);
-            analogWrite(39,150);
             cuatro = getDistance(trigPin4,echoPin4);//izq del
             cinco = getDistance(trigPin5,echoPin5);//izq tras
             medirDistanciaDerecha(cuatro,cinco,15,16);
+            sharp=mideSharp();
             if(sharp <4)//------optico
             {
               c=77;
@@ -899,6 +900,7 @@ void loop()
             rotateRight();
             count=0;
             c=79;
+            break;
       case 79:
             if(count >=3810){
               c=80;
