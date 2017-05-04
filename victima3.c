@@ -368,11 +368,14 @@ void loop()
           }
           cuatro = getDistance(trigPin4,echoPin4);//izq del
           cinco = getDistance(trigPin5,echoPin5);//izq tras
-          tres = getDistance(trigPin3,echoPin3); //centro
-          medirDistanciaDerecha(cuatro,cinco,11,12);//el trigger es el optico,por mientras usamos el sensor de enfrente
-          Serial.print("Sensor 3: ");
-          Serial.println(tres);    
-            if(tres < 20){
+      //tres = getDistance(trigPin3,echoPin3); //centro
+        medirDistanciaDerecha(cuatro,cinco,11,12);//el trigger es el optico,por mientras usamos el sensor de enfrente
+          //Serial.print("Sensor 3: ");
+         // Serial.println(tres);    
+            //if(tres < 20)
+          detect=validateVictim();
+            
+          if(detect){
                q=1;
                c=7;
             }
@@ -381,6 +384,7 @@ void loop()
     case 7:
           fullStop();//entran rutinas del gripper recoger victima
           delay(1000);
+          tomarVictima();
           c=8;
           break;
 
@@ -424,6 +428,7 @@ void loop()
           
     case 12:
           fullStop(); //entran rutinas para dejar victima en su lugar
+          dejarVictima();
           c=16;
           break;
 //victima 2----------------------------
@@ -478,8 +483,11 @@ void loop()
           uno=getDistance(trigPin1,echoPin1);// der  tras
           dos=getDistance(trigPin2,echoPin2); //der del
           medirDistanciaIzquierda(uno,dos,10,12);
-          tres=getDistance(trigPin3,echoPin3);
-          if(tres < 15){
+         // tres=getDistance(trigPin3,echoPin3);
+         // if(tres < 15){
+          detect=validateVictim();
+
+            if(detect){
               q=1;
               c=24;
             }
@@ -487,6 +495,7 @@ void loop()
       case 24:
           fullStop();//entran rutinas del gripper recoger victima
           delay(1000);
+          tomarVictima();
           c=25;
           break;
       case 25:
@@ -587,7 +596,8 @@ void loop()
           }
           break;
       case 38:
-           fullStop();
+           fullStop(); /// rutina para abrir el gripper
+           dejarVictima();
            delay(1000);
            c=39;
            break;
@@ -905,6 +915,7 @@ void loop()
        
       case 77://rtinas para recoger victima
             fullStop(); 
+            tomarVictima();
             delay(1000);
             c=78;
             break;
@@ -1038,6 +1049,8 @@ void loop()
             break;   
       case 95:
             fullStop(); //entran rutinas para dejar victima en su lugar
+            delay();
+            dejarVictima();
             c=95; //inicio de victima 4
             break;
 //--------VICTIMA 4
@@ -1105,6 +1118,8 @@ void loop()
           break;
     case 104:
           fullStop();
+          delay(1000);
+          tomarVictima();
           c=105;
           break;
     case 105:
@@ -1212,6 +1227,7 @@ void loop()
       case 120:
            fullStop();
            delay(1000);//deja victima
+           dejarVictima();
            c=1000;
            break;
 
