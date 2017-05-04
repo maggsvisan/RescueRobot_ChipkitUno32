@@ -878,6 +878,7 @@ void loop()
             q=1;
            }
            break;
+
       case 76:
             if(q){
             moveFwd();
@@ -885,27 +886,37 @@ void loop()
             }
             cuatro = getDistance(trigPin4,echoPin4);//izq del
             cinco = getDistance(trigPin5,echoPin5);//izq tras
-            medirDistanciaDerecha(cuatro,cinco,15,16);
-            sharp=mideSharp();
-            if(sharp <4)//------optico
-            {
-              c=77;
+            medirDistanciaDerecha(cuatro,cinco,13,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
+            //sharp=mideSharp();
+            //Serial.print("Sharp");
+            //Serial.println(sharp);
+            detect=validateVictim();
+            //tres=getDistance(trigPin3,echoPin3);
+            if(detect){ 
+              c=77;// rutinas de gripper
+              q=1;
             }
+            
             break;
+       
       case 77://rtinas para recoger victima
-            fullStop();
+            fullStop(); 
+            delay(1000);
             c=78;
             break;
+
       case 78:
             rotateRight();
             count=0;
             c=79;
             break;
+            
       case 79:
-            if(count >=3810){
+            if(count >=3800){
               c=80;
             }
             break;
+
       case 80:
             if(q){
               moveFwd();
@@ -1105,11 +1116,14 @@ void loop()
             c=106;
           }
           break;
+
       case 106:
           rotateLeft();
           c=107;
           count=0;
           break;
+
+
       case 107:
           if(count >= 2000){
             c=108;
@@ -1651,3 +1665,4 @@ void __ISR(_TIMER_3_VECTOR,IPL3AUTO) comms_handler(void)
 
 
 
+a
