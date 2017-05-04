@@ -1,5 +1,5 @@
 #include <Servo.h>
-#define sensor A0 // define Sharp 
+#define sensor A2 // define Sharp 
 
 const int trigPin = 33; //Definicion de ultrasonico frontal
 const int echoPin = 32;
@@ -20,10 +20,10 @@ long microsecondsToCentimeters(long microseconds)
 
 void tomarVictima()
 {
-    delay(500); //Delay para asegurar que esta esperando a que la victima este completamente dentro de la pinzas del gripper
+    delay(1000); //Delay para asegurar que esta esperando a que la victima este completamente dentro de la pinzas del gripper
     ServoAlfa.write(44); //Bajar
     delay(500);
-    ServoBeta.write(45); //Cerrar
+    ServoBeta.write(10); //Cerrar
     delay(500);
     ServoAlfa.write(50); //Subir
     delay(500);
@@ -70,7 +70,7 @@ void loop()
   Serial.print(sharp);
   Serial.println();
 
-  if(sharp <= 2 && victimaON == 0) //Para evitar que lo agarre antes, hay que poner un delay antes de las acciones del gripper. VictimaON es para que no se cancele la funcion antes de tiempo
+  if(sharp <= 3 && victimaON == 0) //Para evitar que lo agarre antes, hay que poner un delay antes de las acciones del gripper. VictimaON es para que no se cancele la funcion antes de tiempo
   {
     if (sharp == ultrasonic || sharp == ultrasonic++ || sharp == ultrasonic-- || sharp-- == ultrasonic++ || sharp++ == ultrasonic -- || sharp++ == ultrasonic || sharp-- == ultrasonic)
     {
