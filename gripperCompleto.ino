@@ -20,6 +20,7 @@ long microsecondsToCentimeters(long microseconds)
 
 void tomarVictima()
 {
+    delay(500); //Delay para asegurar que esta esperando a que la victima este completamente dentro de la pinzas del gripper
     ServoAlfa.write(44); //Bajar
     delay(500);
     ServoBeta.write(45); //Cerrar
@@ -32,7 +33,7 @@ void dejarVictima()
 {
     ServoAlfa.write(44);  //Bajar
     delay(500);
-    ServoBeta.write(105); //Abrir
+    ServoBeta.write(125); //Abrir
     delay(500);
     ServoAlfa.write(47);  //Neutral
     delay(500);
@@ -43,7 +44,7 @@ void setup() {
   ServoBeta.attach(6); //Servo accion de gripper
   Serial.begin(9600);
   ServoAlfa.write(47); // Neutral
-  ServoBeta.write(105); //Abrir
+  ServoBeta.write(125); //Abrir
 }
 
 void loop()
@@ -69,7 +70,7 @@ void loop()
   Serial.print(sharp);
   Serial.println();
 
-  if(sharp <= 5 && victimaON == 0) //Para evitar que lo agarre antes, hay que poner un delay antes de las acciones del gripper. VictimaON es para que no se cancele la funcion antes de tiempo
+  if(sharp <= 2 && victimaON == 0) //Para evitar que lo agarre antes, hay que poner un delay antes de las acciones del gripper. VictimaON es para que no se cancele la funcion antes de tiempo
   {
     if (sharp == ultrasonic || sharp == ultrasonic++ || sharp == ultrasonic-- || sharp-- == ultrasonic++ || sharp++ == ultrasonic -- || sharp++ == ultrasonic || sharp-- == ultrasonic)
     {
