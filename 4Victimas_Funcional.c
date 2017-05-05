@@ -7,7 +7,7 @@
 
     #include <Servo.h>
     //#define sensor AD2 // define Sharp 
-    int c=0;      // Victima 1 = 0
+    int c=7;      // Victima 1 = 0
                   //victima 2 =13
                   //victima 3 = 39
                   //victima 4 = 96
@@ -308,7 +308,7 @@
               medirDistanciaIzquierda(uno,dos,14,15);
               Serial.println(uno);
               Serial.println(dos);
-              if (uno > 25 && dos > 5){//checa hueco
+              if (uno > 25 && dos > 25){//checa hueco
                 c=1;
               }     
               break;
@@ -318,7 +318,7 @@
               c=2;
               break;
         case 2:
-              if (count > 1800){
+              if (count > 1750){
                 c=3;
               }
               break;
@@ -390,7 +390,6 @@
                 moveFwd();
                 q=0;    
               }
-              Serial.println("15");
               cuatro = getDistance(trigPin4,echoPin4);//izq del
               cinco = getDistance(trigPin5,echoPin5);//izq tras
               medirDistanciaDerecha(cuatro,cinco,9,10);//el trigger es el optico,por mientras usamos el sensor de enfrente
@@ -414,7 +413,7 @@
               c=9;
               break;
         case 9:
-              if (count > 3810)
+              if (count > 4300)
                 c=10;
               break;
               
@@ -425,8 +424,8 @@
               }
               uno=getDistance(trigPin1,echoPin1);// der  tras
               dos=getDistance(trigPin2,echoPin2); //der del
-              medirDistanciaIzquierda(uno,dos,11,12);
-              if(uno > 20 || dos > 20){
+              medirDistanciaIzquierda(uno,dos,10,11);
+              if(uno > 25 || dos > 25){
                   q=1;
                   c=11;
                 }
@@ -438,9 +437,9 @@
               }
               cuatro = getDistance(trigPin4,echoPin4);//izq del
               cinco = getDistance(trigPin5,echoPin5);//izq tras
-              medirDistanciaDerecha(cuatro,cinco,11,12);
+              medirDistanciaDerecha(cuatro,cinco,8,9);
               tres = getDistance(trigPin3,echoPin3); //centro
-              if (tres< 12){
+              if (tres< 15){
                 q=1;
                 c=12;
               }
@@ -459,8 +458,8 @@
               }
               cuatro = getDistance(trigPin4,echoPin4);//izq del
               cinco = getDistance(trigPin5,echoPin5);//izq tras
-              medirDistanciaDerecha(cuatro,cinco,8,11);
-              if(cuatro > 20 && cinco > 20){
+              medirDistanciaDerecha(cuatro,cinco,8,9);
+              if(cuatro > 25 && cinco > 25){
                 q=1;
                 c=17;
               }
@@ -471,7 +470,7 @@
               c=18;
               break;
         case 18:
-              if (count > 1800)
+              if (count > 2200)
                 c=19;
               break;   
         case  19:
@@ -520,11 +519,9 @@
                 moveBck();
                 q=0;
               }
-              uno=getDistance(trigPin1,echoPin1);// der  tras
-              dos=getDistance(trigPin2,echoPin2); //der del
-              medirDistanciaIzquierda(uno,dos,8,10);
               cuatro = getDistance(trigPin4,echoPin4);//izq del
               cinco = getDistance(trigPin5,echoPin5);//izq tras
+              medirDistanciaDerecha(cuatro,cinco,10,11);
               if(cuatro > 20 && cinco > 20){
                 q=1;
                 c=26;
@@ -629,7 +626,7 @@
               cuatro = getDistance(trigPin4,echoPin4);//izq del
               cinco = getDistance(trigPin5,echoPin5);//izq tras
               medirDistanciaDerecha(cuatro,cinco,13,14);
-              if(uno > 25 && dos > 25){
+              if(uno > 30 && dos > 30){
                 q=1;
                 c=40;
               }
@@ -640,7 +637,7 @@
               count=0;
               break;
           case 41:
-              if(count>= 1850){
+              if(count>= 2200){
                 c=42;
               }
               break;
@@ -717,18 +714,15 @@
               break;
           case 50:
               moveFwd();
-              tres=getDistance(trigPin3,echoPin3);
-              
-              if(tres < 12)
-                c=52;
-              //count=0;
+              count=0;
+              c=51;
               break;
-      /*    case 51:
-              if(count >=6000){
+          case 51:
+              if(count >=7000){
                 c=52;
                 count=0;
               }
-              break;*/
+              break;
           case 52:
               rotateRight();
               count=0;
@@ -1258,7 +1252,7 @@
               }
               uno = getDistance(trigPin1,echoPin1);//izq del
               dos = getDistance(trigPin2,echoPin2);//izq tras
-              medirDistanciaIzquierda(uno,dos,20,22);
+              medirDistanciaIzquierda(uno,dos,14,15);
               if(uno > 20 && dos > 20){
                 q=1;
                 c=122;
@@ -1280,7 +1274,7 @@
               c=125;
               break;
           case 125:
-              if(count>=7000){
+              if(count>=6800){
                 c=126;
               }
               break;
@@ -1339,16 +1333,14 @@
               break;
           case 133 :
               moveFwd();
-              tres=getDistance(trigPin3,echoPin3);
-              
-              if(tres < 12)
-                c=134;
+              c=130;
+              count=0;
               break;
-        /* case 130:
+         case 130:
                 if(count >= 7000 ){
                   c=134;
                 }
-              break;*/
+              break;
           
           case 134:
               rotateRight();
@@ -1371,8 +1363,7 @@
               cinco = getDistance(trigPin5,echoPin5);//izq tras
               tres = getDistance(trigPin3,echoPin3); //centro
               medirDistanciaDerecha(cuatro,cinco,13,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
-              
-                if(tres < 15 ){
+              if(tres < 15 ){
                    q=1;
                    c=137;
                 }
@@ -1390,8 +1381,6 @@
                   c=139;
                 }
                 break;
-
-
               case 139:
                  if(q){
                   moveFwd();
