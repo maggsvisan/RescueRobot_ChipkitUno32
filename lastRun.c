@@ -127,7 +127,7 @@ void dejarVictima()
       
        //Serial.println(avgDistanceSharp);
        avgDistanceSharp=totalDistanceSharp/30;
-      
+
        totalDistanceSharp=0;
        i=0;
        return avgDistanceSharp;
@@ -524,7 +524,7 @@ void dejarVictima()
               }
               uno=getDistance(trigPin1,echoPin1);// der  tras
               dos=getDistance(trigPin2,echoPin2); //der del
-              medirDistanciaIzquierda(uno,dos,11,12);
+              medirDistanciaIzquierda(uno,dos,10,11);
               if(uno > 20 && dos > 20){
                 q=1;
                 c=26;
@@ -607,7 +607,7 @@ void dejarVictima()
               cinco = getDistance(trigPin5,echoPin5);//izq tras
               medirDistanciaDerecha(cuatro,cinco,13,14);
               tres = getDistance(trigPin3,echoPin3); //centro
-              if (tres< 25){
+              if (tres < 15){
                 q=1;
                 c=38;
               }
@@ -740,7 +740,7 @@ void dejarVictima()
           case 54:
               moveFwd();
               tres=getDistance(trigPin3,echoPin3);
-              if(tres < 15){
+              if(tres < 13){
                 c=55;
               }
               break;
@@ -773,7 +773,7 @@ void dejarVictima()
                 c=58;//58
                 q=1;
               }
-              if(tres <16){
+              if(tres <15){
                    q=1;
                    c=74;//74
                 }
@@ -813,7 +813,7 @@ void dejarVictima()
                 count=0;
                 c=63;
           case 63:
-                if(count >=2000){
+                if(count >=1850){
                   c=64;
                 }
                 break;
@@ -900,7 +900,7 @@ void dejarVictima()
                c=75;
                break;
           case 75:
-               if(count >= 1790)
+               if(count >= 2000)
                {
                 c=76;
                 q=1;
@@ -914,7 +914,7 @@ void dejarVictima()
                 }
                 cuatro = getDistance(trigPin4,echoPin4);//izq del
                 cinco = getDistance(trigPin5,echoPin5);//izq tras
-                medirDistanciaDerecha(cuatro,cinco,13,14);//el trigger es el optico,por mientras usamos el sensor de enfrente
+                medirDistanciaDerecha(cuatro,cinco,14,15);//el trigger es el optico,por mientras usamos el sensor de enfrente
                 //sharp=mideSharp();
                 //Serial.print("Sharp");
                 //Serial.println(sharp);
@@ -955,7 +955,7 @@ void dejarVictima()
                 dos=getDistance(trigPin2,echoPin2); //der del
                 medirDistanciaIzquierda(uno,dos,10,11);
                 tres= getDistance(trigPin3,echoPin3);
-                if(tres <=13){
+                if(tres <=15){
                     q=1;
                     c=81;
                   }
@@ -965,7 +965,7 @@ void dejarVictima()
                 count=0;
                 c=82;
           case 82:
-                if(count >=2300){
+                if(count >=2000){
                   c=83;
                 }
                 break;
@@ -976,7 +976,7 @@ void dejarVictima()
                 }
                 uno=getDistance(trigPin1,echoPin1);// der  tras
                 dos=getDistance(trigPin2,echoPin2); //der del
-                medirDistanciaIzquierda(uno,dos,10,11);
+                medirDistanciaIzquierda(uno,dos,11,12);
                 tres= getDistance(trigPin3,echoPin3);
                 if(tres <=15){
                     q=1;
@@ -988,7 +988,7 @@ void dejarVictima()
                 count=0;
                 c=85;
           case 85:
-                if(count >=1450){
+                if(count >=1550){
                   c=86;
                 }
                 break;
@@ -1010,7 +1010,7 @@ void dejarVictima()
                 count=0;
                 c=88;
           case 88:
-                if(count >=1400){
+                if(count >=1300){
                   c=89;
                 }
                 break;
@@ -1075,19 +1075,20 @@ void dejarVictima()
               }
               cuatro = getDistance(trigPin4,echoPin4);//izq del
               cinco = getDistance(trigPin5,echoPin5);//izq tras
-              medirDistanciaDerecha(cuatro,cinco,10,11);
+              medirDistanciaDerecha(cuatro,cinco,9,10);
               if(cuatro > 20 && cinco > 20){
                 q=1;
                 c=97;
               }
               break;
+
         case 97:
              rotateRight();
               count=0;
               c=98;
               break;
         case 98:
-              if (count > 1450)
+              if (count > 2000)
                 c=99;
               break;   
         case  99:
@@ -1118,7 +1119,7 @@ void dejarVictima()
               }
               uno=getDistance(trigPin1,echoPin1);// der  tras
               dos=getDistance(trigPin2,echoPin2); //der del
-              medirDistanciaIzquierda(uno,dos,15,16);
+              medirDistanciaIzquierda(uno,dos,20,21);
               detect=validateVictim();
               tres=getDistance(trigPin3,echoPin3);
               if(detect){ 
@@ -1289,7 +1290,7 @@ void dejarVictima()
               count=0;
               break;
           case 127:
-              if(count >= 1400)
+              if(count >= 1300)
               {
                 c=128;
               }
@@ -1354,7 +1355,7 @@ void dejarVictima()
               break;
 
           case 135:
-              if(count >=2000)
+              if(count >=1800)
               {
                 c=136;
               }
@@ -1381,7 +1382,7 @@ void dejarVictima()
                 break;
                 
               case 138:
-                if(count >=2000)
+                if(count >=1800)
                 {
                   c=139;
                 }
@@ -1409,7 +1410,7 @@ void dejarVictima()
                   break;
                   
               case 141:
-                  if(count > 2000)
+                  if(count > 1800)
                   {
                     c=142;
                   }
@@ -1440,7 +1441,7 @@ void dejarVictima()
                   break;
 
               case 144:
-                  if (count >= 2000)
+                  if (count >= 1800)
                     c=145;
                   break;        
                
@@ -1460,7 +1461,6 @@ void dejarVictima()
                 }
                 break;
           
-              //// correccion de cases
               case 146:
                   fullStop();
                   delay(1000);
@@ -1475,7 +1475,7 @@ void dejarVictima()
                   break;
 
               case 148:
-                  if(count >= 2900)
+                  if(count >= 3200)
                      c=149;
                   break;
 
@@ -1513,7 +1513,7 @@ void dejarVictima()
                 uno=getDistance(trigPin1,echoPin1);// der  tras
                 dos=getDistance(trigPin2,echoPin2); //der del
                 tres=getDistance(trigPin3,echoPin3);
-                medirDistanciaIzquierda(uno,dos,14,15);
+                medirDistanciaIzquierda(uno,dos,11,12);
                 if(tres < 15){
                   q=1;
                   c=153;
@@ -1527,7 +1527,7 @@ void dejarVictima()
                     break;
 
               case 154:
-                    if(count >=1900){
+                    if(count >=1800){
                       c=155;
                     }
                   break;
@@ -1554,7 +1554,7 @@ void dejarVictima()
                     break;
 
               case 157:
-                    if(count >=2000){
+                    if(count >=1450){
                       c=158;
                     }
                     break;
