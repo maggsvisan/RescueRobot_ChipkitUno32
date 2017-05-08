@@ -118,16 +118,16 @@ void dejarVictima()
 }
     int mideSharp(){
       do{
-         val2 = analogRead(AnPin)*0.0048828125;
-         distanceSharp = 13*pow(val2, -1);
+        val2 = analogRead(AnPin); 
+         // Calculate linear slope 
+         distanceSharp = (2914 / (val2 + 5)) - 1;
          totalDistanceSharp+=distanceSharp;
          i++;
        }while (i<30);
       
        //Serial.println(avgDistanceSharp);
        avgDistanceSharp=totalDistanceSharp/30;
-       if(avgDistanceSharp < 0)
-        avgDistanceSharp=1000;
+      
        totalDistanceSharp=0;
        i=0;
        return avgDistanceSharp;
